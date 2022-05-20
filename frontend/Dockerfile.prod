@@ -1,0 +1,15 @@
+FROM node:alpine as production
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install --only=production
+
+COPY . .
+
+RUN npm run build
+
+RUN npm install -g serve
+
+CMD ["serve", "build"]
