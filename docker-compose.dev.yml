@@ -42,6 +42,12 @@ services:
       - 5432:5432
     volumes:
       - db-data:/var/lib/postgresql/data
+  sesison:
+    container_name: session_dev
+    image: redis
+    command: redis-server --requirepass password
+    ports:
+      - 6379:6379
 volumes:
   db-data:
 networks:
