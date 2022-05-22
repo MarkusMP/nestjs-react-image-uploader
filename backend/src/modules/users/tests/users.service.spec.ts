@@ -6,6 +6,7 @@ import { UsersService } from '../users.service';
 import * as bcrypt from 'bcryptjs';
 import { userStub } from './stubs/user.stub';
 import { CreateUserDto } from '../dtos';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 describe('UsersService', () => {
   let usersService: UsersService;
@@ -64,6 +65,48 @@ describe('UsersService', () => {
       });
       test('then it should return a message', () => {
         expect(msg).toEqual({ message: 'User created successfully' });
+      });
+    });
+  });
+  describe('updateUser', () => {
+    describe('when updateUser is called', () => {
+      let updateUserDto: UpdateUserDto;
+      beforeEach(async () => {
+        updateUserDto = {
+          username: userStub().username,
+        };
+        jest
+          .spyOn(userRepository, 'findOne')
+          .mockImplementation(async () => userStub());
+
+        await usersService.updateUser(updateUserDto, userStub().id);
+      });
+
+      test('then it should call findOne and save', () => {
+        expect(userRepository.findOne).toHaveBeenCalledTimes(2);
+
+        expect(userRepository.save).toHaveBeenCalledWith(userStub());
+      });
+    });
+  });
+
+  describe('getUser', () => {
+    describe('when getUser is called', () => {
+      let user: User;
+      beforeEach(async () => {
+        jest
+          .spyOn(userRepository, 'findOne')
+          .mockImplementation(async () => userStub());
+
+        user = await usersService.getUser(userStub().id);
+      });
+
+      test('then it should call findOne', () => {
+        expect(userRepository.findOne).toHaveBeenCalledTimes(1);
+      });
+
+      test('then it should return the user', () => {
+        expect(user).toEqual(userStub());
       });
     });
   });

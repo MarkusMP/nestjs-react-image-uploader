@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto, LoginUserDto } from './dtos';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcryptjs';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -56,5 +57,49 @@ export class UsersService {
     }
 
     return { message: 'User logged in successfully' };
+  }
+
+  async updateUser(dto: UpdateUserDto, id: string): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+
+    if (!user) {
+      throw new ForbiddenException('User does not exist');
+    }
+
+    const usernameExists = await this.userRepository.findOne({
+      username: dto.username,
+    });
+
+    if (usernameExists && usernameExists.id !== id) {
+      throw new ConflictException('Username already exists');
+    }
+
+    user.username = dto.username;
+
+    await this.userRepository.save(user);
+
+    return user;
+  }
+
+  async getUser(id: string): Promise<User> {
+    const user = await this.userRepository.findOne({ id });
+
+    if (!user) {
+      throw new ForbiddenException('User does not exist');
+    }
+
+    return user;
+  }
+
+  async deleteUser(id: string): Promise<{ message: string }> {
+    const user = await this.userRepository.findOne({ id });
+
+    if (!user) {
+      throw new ForbiddenException('User does not exist');
+    }
+
+    await this.userRepository.delete({ id });
+
+    return { message: 'User deleted successfully' };
   }
 }

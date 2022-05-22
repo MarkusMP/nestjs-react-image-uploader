@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserDto, LoginUserDto } from '../dtos';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 import { userStub } from './stubs/user.stub';
@@ -67,6 +68,46 @@ describe('UsersController', () => {
 
       test('then it should return "User logged in successfully"', () => {
         expect(msg.message).toEqual('User logged in successfully');
+      });
+    });
+  });
+  describe('updateUser', () => {
+    describe('when updateUser is called', () => {
+      let updateUserDto: UpdateUserDto;
+      let user;
+      beforeEach(async () => {
+        updateUserDto = {
+          username: userStub().username,
+        };
+        user = await usersController.updateUser(updateUserDto, userStub());
+      });
+
+      test('then it should call usersService with updateUserDto and id', () => {
+        expect(usersService.updateUser).toHaveBeenCalledWith(
+          updateUserDto,
+          userStub().id,
+        );
+      });
+
+      test('then it should return the updated user', () => {
+        expect(user).toEqual(userStub());
+      });
+    });
+  });
+
+  describe('getUser', () => {
+    describe('when getUser is called', () => {
+      let user;
+      beforeEach(async () => {
+        user = await usersController.getUser(userStub());
+      });
+
+      test('then it should call usersService with id', () => {
+        expect(usersService.getUser).toHaveBeenCalledWith(userStub().id);
+      });
+
+      test('then it should return the user', () => {
+        expect(user).toEqual(userStub());
       });
     });
   });
