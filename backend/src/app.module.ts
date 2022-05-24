@@ -7,6 +7,8 @@ import {
   DatabaseService,
 } from './modules/database/database.service';
 import { UsersModule } from './modules/users/users.module';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { ImagesModule } from './modules/images/images.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { UsersModule } from './modules/users/users.module';
     TypeOrmModule.forRoot(databaseService.getTypeOrmConfig()),
     AuthModule,
     UsersModule,
+    CloudinaryModule,
+    ImagesModule,
   ],
   providers: [DatabaseService],
 })

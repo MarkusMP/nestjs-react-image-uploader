@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Image } from '../../images/entities/image.entity';
 import {
   BaseEntity,
   Entity,
@@ -6,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity()
@@ -28,4 +30,7 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Image, (image) => image.user)
+  images: Image[];
 }
