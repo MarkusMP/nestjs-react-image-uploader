@@ -1,0 +1,72 @@
+@use "./colors";
+
+.btn {
+  padding: 10px 20px;
+  border: 1px solid colors.$primary-color;
+  border-radius: 5px;
+  background: colors.$primary-color;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  appearance: button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: darken(colors.$primary-color, 5%);
+    transition: all ease-in-out 0.1s;
+  }
+
+  svg {
+    margin-right: 5px;
+  }
+}
+
+.errorBtn {
+  padding: 5px 10px;
+  border: 1px solid colors.$error-color;
+  border-radius: 5px;
+  background: colors.$error-color;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  appearance: button;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+
+  justify-content: center;
+
+  &:hover {
+    background-color: darken(colors.$error-color, 5%);
+    transition: all ease-in-out 0.1s;
+  }
+
+  svg {
+    margin-right: 5px;
+  }
+}
+
+.boardBtn {
+  background: colors.$grey-color;
+  color: darken(colors.$grey-color, 30%);
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  appearance: button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 100%;
+  height: 100px;
+
+  &:hover {
+    background-color: darken(colors.$grey-color, 5%);
+    transition: all ease-in-out 0.1s;
+  }
+}

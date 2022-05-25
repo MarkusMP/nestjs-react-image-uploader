@@ -1,0 +1,54 @@
+@use "./colors";
+
+.form {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.formGroup {
+  margin: 0 auto;
+  padding: 5px;
+  max-width: 480px;
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  width: 100%;
+  max-width: 480px;
+  padding: 10px;
+  border: 1px solid darken(colors.$secondary-color, 20%);
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-family: inherit;
+}
+
+.errorGroup input,
+.errorGroup textarea,
+.errorGroup select {
+  border: 1px solid colors.$error-color;
+  &:focus {
+    outline: 1px solid colors.$error-color;
+  }
+}
+
+.successGroup input,
+.successGroup textarea,
+.successGroup select {
+  border: 1px solid colors.$success-color;
+  &:focus {
+    outline: 1px solid colors.$success-color;
+  }
+}
+
+textarea {
+  max-width: 100%;
+  min-width: 100%;
+  max-width: 480px;
+}
+
+.formGroup label {
+  text-align: left;
+  display: block;
+  margin: 0 0 5px 3px;
+}
