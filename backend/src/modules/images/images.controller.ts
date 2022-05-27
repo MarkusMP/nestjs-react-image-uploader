@@ -37,7 +37,6 @@ export class ImagesController {
     return this.imagesService.upload(user.id, file, dto);
   }
 
-  @UseGuards(AuthenticatedGuard)
   @Get()
   getAllImages(): Promise<Image[]> {
     return this.imagesService.getAllImages();

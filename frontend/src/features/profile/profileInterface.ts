@@ -14,3 +14,7 @@ export interface IProfile {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IMessage {
+  message: string;
+}

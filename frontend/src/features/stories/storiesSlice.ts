@@ -1,21 +1,38 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { IProfile, IProfileState, IMessage } from "./profileInterface";
-import profileService from "./profileService";
+import {
+  IDeleteData,
+  IPhoto,
+  IPhotoData,
+  IPhotosState,
+} from "./storiesInterface";
+import storiesSlice from "./storiesService";
 
-const initialState: IProfileState = {
+const initialState: IPhotosState = {
   isError: false,
   isLoading: false,
   isSuccess: false,
   errorMessage: "",
   message: "",
-  profile: null,
+  photos: [],
 };
 
-export const getProfile = createAsyncThunk(
-  "profile/getProfile",
+export const createStory = createAsyncThunk(
+  "stories/createStory",
+  async (data: IPhotoData, thunkAPI) => {
+    try {
+      return await storiesSlice.createStory(data);
+    } catch (error: any) {
+      const message = error.response.data.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getStories = createAsyncThunk(
+  "stories/getStories",
   async (_, thunkAPI) => {
     try {
-      return await profileService.getProfile();
+      return await storiesSlice.getStories();
     } catch (error: any) {
       const message = error.response.data.message;
       return thunkAPI.rejectWithValue(message);
@@ -23,11 +40,11 @@ export const getProfile = createAsyncThunk(
   }
 );
 
-export const updateUsername = createAsyncThunk(
-  "profile/updateUsername",
-  async (username: string, thunkAPI) => {
+export const deleteStory = createAsyncThunk(
+  "stories/deleteStory",
+  async (id: string, thunkAPI) => {
     try {
-      return await profileService.updateUsername(username);
+      return await storiesSlice.deleteStory(id);
     } catch (error: any) {
       const message = error.response.data.message;
       return thunkAPI.rejectWithValue(message);
@@ -35,77 +52,68 @@ export const updateUsername = createAsyncThunk(
   }
 );
 
-export const deleteProfile = createAsyncThunk(
-  "profile/deleteProfile",
-  async (_, thunkAPI) => {
-    try {
-      return await profileService.deleteProfile();
-    } catch (error: any) {
-      const message = error.response.data.message;
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-export const profileSlice = createSlice({
-  name: "profile",
+export const photosSlice = createSlice({
+  name: "photos",
   initialState,
   reducers: {
-    reset: (state: IProfileState) => {
+    reset: (state: IPhotosState) => {
       state.isError = false;
       state.isLoading = false;
       state.isSuccess = false;
       state.message = "";
       state.errorMessage = "";
-      state.profile = null;
+      state.photos = [];
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getProfile.pending, (state) => {
+      .addCase(createStory.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(
-        getProfile.fulfilled,
-        (state, action: PayloadAction<IProfile>) => {
+        createStory.fulfilled,
+        (state, action: PayloadAction<IPhoto>) => {
           state.isLoading = false;
           state.isSuccess = true;
-          state.profile = action.payload;
+          state.photos.unshift(action.payload);
         }
       )
-      .addCase(getProfile.rejected, (state, { payload }: any) => {
+      .addCase(createStory.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = payload;
       })
-      .addCase(updateUsername.pending, (state) => {
+      .addCase(getStories.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(
-        updateUsername.fulfilled,
-        (state, action: PayloadAction<IProfile>) => {
+        getStories.fulfilled,
+        (state, action: PayloadAction<IPhoto[]>) => {
           state.isLoading = false;
           state.isSuccess = true;
-          state.profile = action.payload;
+          state.photos = action.payload;
         }
       )
-      .addCase(updateUsername.rejected, (state, { payload }: any) => {
+      .addCase(getStories.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = payload;
       })
-      .addCase(deleteProfile.pending, (state) => {
+      .addCase(deleteStory.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(
-        deleteProfile.fulfilled,
-        (state, action: PayloadAction<IMessage>) => {
+        deleteStory.fulfilled,
+        (state, action: PayloadAction<IDeleteData>) => {
           state.isLoading = false;
           state.isSuccess = true;
+          state.photos = state.photos.filter(
+            (photo: IPhoto) => photo.id !== action.payload.id
+          );
           state.message = action.payload.message;
         }
       )
-      .addCase(deleteProfile.rejected, (state, { payload }: any) => {
+      .addCase(deleteStory.rejected, (state, { payload }: any) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = payload;
@@ -113,5 +121,5 @@ export const profileSlice = createSlice({
   },
 });
 
-export const { reset } = profileSlice.actions;
-export default profileSlice.reducer;
+export const { reset } = photosSlice.actions;
+export default photosSlice.reducer;
