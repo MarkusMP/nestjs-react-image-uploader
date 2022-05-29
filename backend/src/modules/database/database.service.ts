@@ -37,9 +37,11 @@ export class DatabaseService {
         password: this.configService.get('PROD_DB_PASSWORD'),
         database: this.configService.get('PROD_DB_NAME'),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: false,
+        synchronize: true,
         ssl: {
-          rejectUnauthorized: false,
+          rejectUnauthorized: this.configService.get('DATABASE_URL')
+            ? true
+            : false,
         },
       };
     }
