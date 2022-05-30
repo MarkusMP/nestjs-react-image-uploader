@@ -1,6 +1,6 @@
 <h1>Stories</h1>
 
-<a href="https://trello-clone-telio.herokuapp.com" target="_blank">Preview App</a>
+<a href="https://stories-apps.herokuapp.com/" target="_blank">Preview App</a>
 
 This was build with
 <ul>
